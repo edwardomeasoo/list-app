@@ -1,12 +1,13 @@
-// add an item, from submitted form item
 const form = document.getElementById('addForm');
 const itemList = document.getElementById('items');
+const filter = document.querySelector('#filter');
 
-// form submit event
+// events: item submit, delete, filter
 form.addEventListener('submit', addItem);
 itemList.addEventListener('click', removeItem);
+filter.addEventListener('keyup', filterItems);
 
-function addItem(e) {
+function addItem (e) {
 	e.preventDefault();
 	// grab submitted form text
 	const newItem = document.getElementById('item').value;
@@ -26,7 +27,7 @@ function addItem(e) {
 	itemList.appendChild(li)
 }
 
-function removeItem(e) {
+function removeItem (e) {
 // if click target == delete button, confirm then delete li from list
 	if (e.target.classList.contains('delete')) {
 		if(confirm('Delete?')) {
@@ -34,4 +35,20 @@ function removeItem(e) {
 			itemList.removeChild(li);
 		}
 	}
+}
+function filterItems (e) {
+	// convert text to lowercase
+	const text = e.target.value.toLowerCase();
+	// get items list
+	let items = itemList.getElementsByTagName('li');
+	// convert to array, then check item content for filter match
+	let itemName = '';
+	Array.from(items).forEach(item => {
+		itemName = item.firstChild.textContent.toLocaleLowerCase();
+		if (itemName.includes(text)) {
+			item.style.display = 'block';
+		} else {
+			item.style.display = 'none';
+		}
+	})
 }
